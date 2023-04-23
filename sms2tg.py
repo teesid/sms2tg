@@ -35,8 +35,10 @@ def main(args):
                      smsReceivedCallbackFunc = lambda sms: handle_sms(sms, args.name))
     modem.smsTextMode = False
     modem.connect(args.pin)
-    print('Waiting for SMS message...')
     try:
+        print('Processing old received SMS messages...')
+        modem.processStoredSms()
+        print('Waiting for SMS messages...')
         modem.rxThread.join(2**31) # Specify a (huge) timeout so that it essentially blocks indefinitely, but still receives CTRL+C interrupt signal
     finally:
         modem.close()
